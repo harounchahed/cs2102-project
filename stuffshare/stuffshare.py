@@ -39,6 +39,13 @@ def show_entries():
     return render_template('show_entries.html', entries=entries)
 
 
+@app.route('/posts')
+def show_posts():
+    cur = g.db.execute('select * from posts order by id desc')
+    posts = [dict(title=row[1], desc=row[2]) for row in cur.fetchall()]
+    return render_template('show_posts.html', posts=posts)
+
+
 @app.route('/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
