@@ -21,9 +21,12 @@
         <h2 class=post-title>{{ post.title }}</h2>
         {{ post.desc|safe }}
         <div class=post-price>{{ post.price }}</div>
-        {% else %}
-        <li>
-            <em>Unbelievable. No posts here so far</em>
-            {% endfor %}
+        {% for bid in post.bids %}
+        <ul>
+            <li>User: {{ bid[0] }}, Offer: {{ bid[2] }}</li>
+        </ul>
+        {% endfor %} {% else %}
+        <em>Unbelievable. No posts here so far</em>
+        {% endfor %}
 </ul>
 {% endblock %}

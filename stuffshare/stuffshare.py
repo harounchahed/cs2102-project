@@ -41,9 +41,13 @@ def show_entries():
 
 @app.route('/show_posts')
 def show_posts():
-    cur = g.db.execute('select * from posts order by id desc')
-    posts = [dict(title=row[1], price=row[4], desc=row[2])
-             for row in cur.fetchall()]
+    posts_cursor = g.db.execute('select * from posts order by id desc')
+    posts = []
+    for row in posts_cursor.fetchall():
+        bids_cursor = g.db.execute(
+            'select * from bids where post_id = ?', [row[0]])
+        posts.append(dict(title=row[1], price=row[4],
+                          desc=row[2], bids=bids_cursor.fetchall()))
     return render_template('show_posts.html', posts=posts)
 
 
