@@ -1,21 +1,27 @@
 {% extends "layout.html" %} {% block body %} {% if session.logged_in %}
-<form action="" method=post class=add-entry>
+<form action="add_post" method=post class=add-entry>
     <dl>
         <dt>Title:
             <dd>
                 <input type=text size=30 name=title>
-                <dt>Text:
+                <dt>Description:
                     <dd>
-                        <textarea name=text rows=5 cols=40></textarea>
-                        <dd>
-                            <input type=submit value=Share>
+                        <textarea name=desc rows=5 cols=40></textarea>
+                        <dt>Price:
+                            <dd>
+                                <input type=number name=price rows=5 cols=40>
+                                <dd>
+                                    <input type=submit value="Create post">
     </dl>
 </form>
 {% endif %}
 <ul class=entries>
     {% for post in posts %}
     <li>
-        <h2>{{ post.title }}</h2>{{ post.desc|safe }} {% else %}
+        <h2 class=post-title>{{ post.title }}</h2>
+        {{ post.desc|safe }}
+        <div class=post-price>{{ post.price }}</div>
+        {% else %}
         <li>
             <em>Unbelievable. No posts here so far</em>
             {% endfor %}

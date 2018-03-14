@@ -39,11 +39,23 @@ def show_entries():
     return render_template('show_entries.html', entries=entries)
 
 
-@app.route('/posts')
+@app.route('/show_posts')
 def show_posts():
     cur = g.db.execute('select * from posts order by id desc')
-    posts = [dict(title=row[1], desc=row[2]) for row in cur.fetchall()]
+    posts = [dict(title=row[1], price=row[4], desc=row[2])
+             for row in cur.fetchall()]
     return render_template('show_posts.html', posts=posts)
+
+
+@app.route('/add_post', methods=['POST'])
+def add_post():
+    if not session.get('logged_in'):
+        abort(401)
+    g.db.execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)',
+                 [request.form['title'], request.form['desc'], "hello@gmail.com", request.form['price']])
+    g.db.commit()
+    flash('New post was successfully created')
+    return redirect(url_for('show_posts'))
 
 
 @app.route('/add', methods=['POST'])
