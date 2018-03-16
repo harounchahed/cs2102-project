@@ -1,0 +1,8 @@
+click==6.7
+Flask==0.12.2
+Flask-Login==0.4.1
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+-e git+https://github.com/jeremyyew/cs2102-project.git@4363b465012e356d2ec7b7bcb9fd19bc3281ea6c#egg=stuffshare&subdirectory=stuffshare
+Werkzeug==0.14.1

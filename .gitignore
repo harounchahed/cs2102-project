@@ -105,4 +105,4 @@ ENV/
 *.code-workspace
 
 # database
-*.db
+stuffshare/stuffshare/stuffshare.db
