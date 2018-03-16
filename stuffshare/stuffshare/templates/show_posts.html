@@ -15,18 +15,21 @@
     </dl>
 </form>
 {% endif %}
+<h1>All posts</h1>
 <ul class=entries>
     {% for post in posts %}
     <li>
-        <h2 class=post-title>{{ post.title }}</h2>
-        {{ post.desc|safe }}
-        <div class=post-price>{{ post.price }}</div>
-        {% for bid in post.bids %}
+        <h3 class=post-title>{{ post.title }}</h3>
+        <div class=post-price>Price: {{ post.price }}</div>
+        <div class=post-desc>Description: {{ post.desc|safe }}</div>
+        {% if post.bids %}
+        <h4>Bids:</h4>
+        {% endif %} {% for bid in post.bids %}
         <ul>
             <li>User: {{ bid[0] }}, Offer: {{ bid[2] }}</li>
         </ul>
         {% endfor %} {% else %}
-        <em>Unbelievable. No posts here so far</em>
+        <em>Unbelievable. No posts here so far.</em>
         {% endfor %}
 </ul>
 {% endblock %}

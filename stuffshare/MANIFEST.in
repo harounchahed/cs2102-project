@@ -1,0 +1,3 @@
+graft stuffshare/templates
+graft stuffshare/static
+include stuffshare/schema.sql
