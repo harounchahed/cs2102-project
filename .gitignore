@@ -103,3 +103,6 @@ ENV/
 # VS code 
 .vscode
 *.code-workspace
+
+# database
+*.db
