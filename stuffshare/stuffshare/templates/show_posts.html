@@ -23,11 +23,12 @@
         <h3 class=post-title>{{ post.title }}</h3>
         <div class=post-price>Price: {{ post.price }}</div>
         <div class=post-desc>Description: {{ post.desc|safe }}</div>
+        <div class=post-user>Posted by: {{ post.user_email }}</div>
         {% if post.bids %}
         <h4>Bids:</h4>
         {% endif %} {% for bid in post.bids %}
         <ul>
-            <li>User: {{ bid[0] }}, Offer: {{ bid[2] }}</li>
+            <li>{{ bid[0] }} offered {{ bid[2] }}.</li>
         </ul>
         {% endfor %} {% else %}
         <em>Unbelievable. No posts here so far.</em>

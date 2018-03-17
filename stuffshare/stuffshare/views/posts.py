@@ -1,6 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-from stuffshare import *
-from . import app
+from ..stuffshare import *
 
 
 @app.route('/')
@@ -12,8 +10,11 @@ def show_posts():
     for post in posts_rows:
         bids = db.execute(
             'select * from bids where post_id = ?', [post["id"]]).fetchall()
-        posts.append(dict(title=post["title"], price=post["price"],
-                          desc=post["description"], bids=bids))
+        posts.append(dict(user_email=post["user_email"],
+                          title=post["title"],
+                          price=post["price"],
+                          desc=post["description"],
+                          bids=bids))
     return render_template('show_posts.html', posts=posts)
 
 
