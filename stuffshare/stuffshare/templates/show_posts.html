@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block body %} {% if session.logged_in %}
+<h1>Create new post</h1>
 <form action="add_post" method=post class=add-entry>
     <dl>
         <dt>Title:
@@ -15,7 +16,7 @@
     </dl>
 </form>
 {% endif %}
-<h1>All posts</h1>
+<h1>Browse posts</h1>
 <ul class=entries>
     {% for post in posts %}
     <li>
