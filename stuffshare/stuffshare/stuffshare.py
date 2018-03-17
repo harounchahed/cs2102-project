@@ -2,19 +2,7 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-# create our little application :)
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-
-# Load default config and override config from an environment variable
-app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'stuffshare.db'),
-    SECRET_KEY='development key',
-    USERNAME='admin',
-    PASSWORD='default'
-))
-app.config.from_envvar('STUFFSHARE_SETTINGS', silent=True)
+from . import app
 
 
 def connect_db():
@@ -22,6 +10,15 @@ def connect_db():
     rv = sqlite3.connect(app.config['DATABASE'])
     rv.row_factory = sqlite3.Row
     return rv
+
+
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
 
 
 def init_db():
@@ -36,15 +33,6 @@ def initdb_command():
     """Initializes the database."""
     init_db()
     print('Initialized the database.')
-
-
-def get_db():
-    """Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
 
 
 @app.teardown_appcontext
@@ -90,45 +78,37 @@ def add_entry():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+        db = get_db()
+        login_email = request.form['username']
+        login_password = request.form['password']
+        emails = db.execute(
+            'select * from users where email = ?', [login_email]).fetchall()
+        if not emails and login_email != app.config['USERNAME']:
+            flash('Sorry, the account "{}" does not exist.'.format(login_email))
+        elif login_password != "password":
+            error = "Invalid password"
         else:
             session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('show_entries'))
+            session['user'] = request.form['username']
+            flash('Logged in')
+            return redirect(url_for('show_posts'))
     return render_template('login.html', error=error)
 
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    session.pop('user', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
 
-@app.route('/')
-def show_posts():
-    posts_cursor = g.db.execute('select * from posts order by id desc')
-    posts = []
-    for row in posts_cursor.fetchall():
-        bids_cursor = g.db.execute(
-            'select * from bids where post_id = ?', [row[0]])
-        posts.append(dict(title=row[1], price=row[4],
-                          desc=row[2], bids=bids_cursor.fetchall()))
-    return render_template('show_posts.html', posts=posts)
-
-
-@app.route('/add_post', methods=['POST'])
-def add_post():
-    if not session.get('logged_in'):
-        abort(401)
-    g.db.execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)',
-                 [request.form['title'], request.form['desc'], "hello@gmail.com", request.form['price']])
-    g.db.commit()
-    flash('New post was successfully created')
-    return redirect(url_for('show_posts'))
+@app.route('/getsession')
+def getsession():
+    if 'user' in session:
+        return session['user']
+    else:
+        return 'Not logged in'
 
 
 if __name__ == '__main__':
