@@ -1,0 +1,15 @@
+{% extends "layout.html" %} {% block body %}
+<h1 class=post-title>
+    {{ post.title }}
+</h1>
+<div class=post-price>${{ post.price }}</div>
+<div class=post-desc>{{ post.desc|safe }}</div>
+<div class=post-user>Posted by: {{ post.user_email }}</div>
+<h4>Bids:</h4>
+{% if bids %}
+<ul>{% for bid in bids %}
+    <li>{{ bid.user_email }} offered {{ bid.offer }}.</li>
+    {% endfor %}
+</ul>
+{% else %}
+<em>No current bids.</em>{% endif %} {% endblock %}
