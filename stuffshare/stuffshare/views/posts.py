@@ -1,4 +1,4 @@
-from ..stuffshare import *
+from stuffshare import *
 
 
 @app.route('/')
