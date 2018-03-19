@@ -1,4 +1,5 @@
 from stuffshare import *
+from login import logged_in
 
 
 @app.route('/')
@@ -15,7 +16,7 @@ def show_posts():
                           title=post["title"],
                           price=post["price"],
                           desc=post["description"],
-                          bids=bids))
+                          no_bids=len(bids)))
     return render_template('show_posts.html', posts=posts)
 
 
@@ -25,7 +26,7 @@ def add_post():
         abort(401)
     db = get_db()
     db.execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)',
-               [request.form['title'], request.form['desc'], "hello@gmail.com", request.form['price']])
+               [request.form['title'], request.form['desc'], session['user'], request.form['price']])
     db.commit()
     flash('New post was successfully created')
     return redirect(url_for('show_posts'))

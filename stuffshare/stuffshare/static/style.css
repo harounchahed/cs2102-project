@@ -68,3 +68,13 @@ h2 {
 .post-desc {
   display: block;
 }
+
+.no-bids {
+  --no-bid-color: rgb(88, 206, 77);
+  display: inline-block;
+  border: 2px solid var(--no-bid-color);
+  border-radius: 18px;
+  padding: 10px 8px 8px 8px;
+  color: var(--no-bid-color);
+  margin-top: 5px;
+}

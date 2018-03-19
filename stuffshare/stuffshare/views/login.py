@@ -1,4 +1,18 @@
 from stuffshare import *
+from functools import wraps
+
+from flask import flash, redirect, url_for
+
+
+def logged_in(func):
+    @wraps(func)
+    def check_logged_in(*args, **kwargs):
+        if 'user' not in session:
+            flash("Please log in to your account.")
+            return render_template('login.html')
+        else:
+            return func(*args, **kwargs)
+    return check_logged_in
 
 
 @app.route('/login', methods=['GET', 'POST'])
