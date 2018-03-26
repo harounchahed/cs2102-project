@@ -87,6 +87,7 @@ def add_entry():
 import views.posts
 import views.login
 import views.bids
+import views.signup
 
 if __name__ == '__main__':
     app.run()

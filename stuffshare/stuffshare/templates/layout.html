@@ -6,6 +6,7 @@
   <div class=metanav>
     {% if not session.logged_in %}
     <a href="{{ url_for('login') }}">log in</a>
+    <a href="{{ url_for('signup') }}">sign up</a>
     {% else %}
     <span class=logged-in-user>Logged in as: {{ session.user }}</span>
     <a href="{{ url_for('logout') }}">log out</a>
