@@ -41,7 +41,7 @@ def logout():
     session.pop('logged_in', None)
     session.pop('user', None)
     flash('You were logged out')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_posts'))
 
 
 @app.route('/getsession')
