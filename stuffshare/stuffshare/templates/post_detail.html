@@ -8,8 +8,20 @@
 <h4>Bids:</h4>
 {% if bids %}
 <ul>{% for bid in bids %}
-    <li>{{ bid.user_email }} offered {{ bid.offer }}.</li>
+    <li>{{ bid.user_email }} offered {{ bid.offer }}. {% if session.logged_in and session.user == bid.user_email %}
+        <a href="{{ url_for('delete_bid', post_id = bid.post_id, user_email = bid.user_email) }}">Delete my bid</a>
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% else %}
-<em>No current bids.</em>{% endif %} {% endblock %}
+<em>No current bids.</em>{% endif %} {% if session.logged_in %}
+<h4>Make a bid:</h4>
+<form action="{{ url_for('add_bid', post_id = post.id) }}" , method=post class=add-entry>
+    <dt>Bid amount:
+        <input type=number name=offer rows=5 cols=40>
+        <dd>
+            <input type=submit value="Submit Offer">
+            </dl>
+</form>
+{% endif %}{% endblock %}
