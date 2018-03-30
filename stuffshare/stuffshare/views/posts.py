@@ -19,11 +19,12 @@ def show_posts():
                           no_bids=len(bids)))
     return render_template('show_posts.html', posts=posts)
 
+
 @app.route('/delete_post/<string:user_email>/<int:post_id>', methods=['GET'])
 def delete_post(user_email, post_id):
     if not session.get('logged_in'):
         abort(401)
-    elif session['user'] != user_email:
+    elif session['user_email'] != user_email:
         flash("Sorry, you can only delete your own posts.")
     else:
         db = get_db()
@@ -31,7 +32,8 @@ def delete_post(user_email, post_id):
                    [post_id])
         db.commit()
         flash('Your post has been deleted.')
-    return redirect(url_for('show_user_posts', user_email = user_email))
+    return redirect(url_for('show_user_posts', user_email=user_email))
+
 
 @app.route('/add_post', methods=['POST'])
 def add_post():
@@ -39,7 +41,7 @@ def add_post():
         abort(401)
     db = get_db()
     db.execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)',
-               [request.form['title'], request.form['desc'], session['user'], request.form['price']])
+               [request.form['title'], request.form['desc'], session['user_email'], request.form['price']])
     db.commit()
     flash('New post was successfully created')
     return redirect(url_for('show_posts'))

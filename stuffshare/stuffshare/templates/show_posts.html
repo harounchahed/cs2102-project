@@ -27,13 +27,6 @@
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>
-        <!-- {% if post.bids %}
-        <h4>Bids:</h4>
-        {% endif %} {% for bid in post.bids %}
-        <ul>
-            <li>{{ bid.user_email }} offered {{ bid.offer }}.</li>
-        </ul>
-        {% endfor %}  -->
         {% if post.no_bids > 1 %}
         <div class=no-bids>{{ post.no_bids }} bids</div>
         {% elif post.no_bids == 1 %}
