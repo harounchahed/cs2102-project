@@ -10,6 +10,7 @@
     {% else %}
     <span class=logged-in-user>Logged in as: {{ session.user }}</span>
     <a href="{{ url_for('logout') }}">log out</a>
+    <a href="{{ url_for('editprofile') }}">edit profile</a>
     {% endif %}
   </div>
   {% for message in get_flashed_messages() %}

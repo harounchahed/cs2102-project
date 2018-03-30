@@ -45,7 +45,7 @@ def logout():
 
 
 @app.route('/getsession')
-def getsession():
+def getsession():   
     if 'user' in session:
         return session['user']
     else:
@@ -63,4 +63,17 @@ def signup():
         db.commit()
         flash('Welcome to stuffshare!') 
         return redirect(url_for('login'))
-    return render_template("signup.html")        
+    return render_template("signup.html")    
+
+@app.route('/editprofile', methods=['GET','POST'])
+def editprofile():
+    if request.method == 'POST':
+        db = get_db()
+        new_username = request.form['username']
+        new_email = request.form['email']
+        new_password = request.form['password']        
+        db.execute('UPDATE users SET  email= ?, name = ?, password_hash = ? WHERE email = ?',   
+                [new_email, new_username, new_password, session['user'] ])
+        db.commit()
+        return redirect(url_for('login'))
+    return render_template("editprofile.html")      
