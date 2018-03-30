@@ -9,7 +9,7 @@
     <a href="{{ url_for('signup') }}">sign up</a>
     {% else %}
     <a href="{{ url_for('show_user_posts', user_email = session.user_email) }}">View my posts</a>
-    <span class=logged-in-user>Logged in as: {{ session.user }}</span>
+    <span class=logged-in-user>Logged in as: {{ session.user_email }}</span>
     <a href="{{ url_for('logout') }}">log out</a>
     <a href="{{ url_for('editprofile') }}">edit profile</a>
     {% endif %}

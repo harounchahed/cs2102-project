@@ -80,8 +80,8 @@ def editprofile():
                        [new_user_email, new_name, new_password, session['user_email']])
             db.commit()
             session['user_email'] = new_user_email
+            session['name'] = new_name
             flash('Profile successfully updated!')
         except Exception as e:
             flash(str(e))
-        return redirect(url_for('editprofile'))
     return render_template("editprofile.html")
