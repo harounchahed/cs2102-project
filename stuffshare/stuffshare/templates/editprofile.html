@@ -7,13 +7,13 @@
         <dl>
             <dt>Username:
                 <dd>
-                    <input type=text name=username>
+                    <input type=text name=username required value= {{ session['name'] }} >
                     <dt>Email:
                         <dd>
-                            <input type=text name=email value = {{session['user']}}>
+                            <input type=text name=email value= {{ session['user'] }}>
                             <dt>Password:
                                 <dd>
-                                    <input type=password name=password>
+                                    <input type=password name=password required>
                                 <dd>
                                     <input type=submit value=submit>
         </dl>

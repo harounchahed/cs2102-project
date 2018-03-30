@@ -31,6 +31,8 @@ def login():
         else:
             session['logged_in'] = True
             session['user'] = request.form['username']
+            print(emails[0]["name"])
+            session['name'] = emails[0]["name"]
             flash('Logged in')
             return redirect(url_for('show_posts'))
     return render_template('login.html', error=error)
@@ -66,14 +68,19 @@ def signup():
     return render_template("signup.html")    
 
 @app.route('/editprofile', methods=['GET','POST'])
-def editprofile():
+def editprofile():    
     if request.method == 'POST':
         db = get_db()
         new_username = request.form['username']
         new_email = request.form['email']
-        new_password = request.form['password']        
-        db.execute('UPDATE users SET  email= ?, name = ?, password_hash = ? WHERE email = ?',   
-                [new_email, new_username, new_password, session['user'] ])
-        db.commit()
-        return redirect(url_for('login'))
+        new_password = request.form['password']  
+        try:       
+            db.execute('UPDATE users SET  email= ?, name = ?, password_hash = ? WHERE email = ?',   
+                    [new_email, new_username, new_password, session['user'] ])
+            db.commit()
+            session['user'] = new_email
+            flash('Profile successfully updates!')
+        except Exception as e: 
+            flash(str(e))
+        return redirect(url_for('editprofile'))
     return render_template("editprofile.html")      
