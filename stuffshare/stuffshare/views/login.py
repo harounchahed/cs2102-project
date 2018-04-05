@@ -38,6 +38,7 @@ def login():
 
 @app.route('/delete_account',methods=['POST'])
 def delete_account():
+    #hi
       db = get_db()
       db.execute('delete from users where email = ?', [session['user']])
       db.commit() 
