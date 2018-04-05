@@ -23,7 +23,9 @@
         <h3 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
         </h3>
-
+        {% if session.logged_in and session.user_email == user_email %}
+        <a href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">Delete my post</a>
+        {% endif %}
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>

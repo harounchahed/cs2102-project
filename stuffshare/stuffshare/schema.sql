@@ -14,7 +14,7 @@ drop table if exists bids;
 
 create table users (
     email char(100) primary key,
-    name char(100) unique not null,
+    name char(100)  not null,
     password_hash text 
 ); 
  
