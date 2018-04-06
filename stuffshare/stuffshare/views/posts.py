@@ -2,6 +2,32 @@ from stuffshare import *
 from login import logged_in
 
 
+@app.context_processor
+def inject_notifications():
+    if session.get('logged_in'):
+        user = session['user_email']
+        db = get_db()
+        notification_rows = db.execute(
+            'select bidder, post_id, (select title from posts where id = post_id) title from notifications where post_id in (select id from posts where user_email = ?)', [user]).fetchall()
+        notifications = []
+        for notification_row in notification_rows:
+            message = notification_row['bidder'] + " has made a bid on your post \"" + str(
+                notification_row['title']) + "\"!"
+            notifications.append(dict(
+                message=message, user_email=notification_row['bidder'], post_id=notification_row['post_id']))
+        return dict(notifications=notifications)
+    else:
+        return dict()
+#<string:user_email>/<int:post_id>/<string:page>
+
+
+@app.route('/delete_notification/<string:user_email>/<int:post_id>')
+def delete_notification(user_email, post_id):
+    # execute delete query
+    # redirect to prev page if possible
+    return redirect(url_for('show_posts'))
+
+
 @app.route('/')
 def show_posts():
     db = get_db()
