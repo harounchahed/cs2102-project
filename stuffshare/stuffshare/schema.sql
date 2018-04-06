@@ -40,6 +40,18 @@ create table bids (
     ON DELETE CASCADE
 ); 
 
+create table closed_post (
+    post_id integer,
+    owner_email char(100),
+    winner_email char(100),
+    primary key (post_id),
+    foreign key (post_id) references posts(email),
+    ON DELETE CASCADE
+    foreign key (owner_email) references users(email), -- think whether to add any "on delete" action
+    foreign key (winner_email) references users(email) -- same as above
+
+)
+
 insert into users 
 (email, name)
 values 

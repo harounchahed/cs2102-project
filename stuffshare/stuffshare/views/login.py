@@ -36,9 +36,8 @@ def login():
             return redirect(url_for('show_posts'))
     return render_template('login.html', error=error)
 
-@app.route('/delete_account',methods=['POST'])
+@app.route('/delete_account')
 def delete_account():
-    #hi
       db = get_db()
       db.execute('delete from users where email = ?', [session['user']])
       db.commit() 
