@@ -32,7 +32,7 @@ def login():
             session['logged_in'] = True
             session['user_email'] = request.form['user_email']
             session['name'] = user_emails[0]["name"]
-            flash('Logged in')
+            flash('Logged in.')
             return redirect(url_for('show_posts'))
     return render_template('login.html', error=error)
 
