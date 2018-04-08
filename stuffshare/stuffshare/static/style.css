@@ -8,7 +8,17 @@ h1 {
 }
 h1 a, h3 a{
   text-decoration: none;
+  font-size: 1.3em;
 }
+h3 .delete_post {
+  vertical-align:middle;
+  color: rgba(223, 0, 0);
+  opacity: 0.5;
+}
+h3 .delete_post:hover {
+  opacity: 1;
+}
+
 h1,
 h2 {
   font-family: 'Open Sans', sans-serif;
@@ -69,7 +79,11 @@ h2 {
 }
 .dismiss {
   float: right;
-  color: #0000004f;
+  color: #2c2c2c;
+  opacity: 0.5;
+}
+.dismiss:hover {
+  opacity: 1;
 }
 .error {
   background: #f0d6d6;
