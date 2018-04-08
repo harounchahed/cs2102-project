@@ -46,6 +46,7 @@ create table notifications (
     post_id integer,
     primary key (bidder, post_id),
     foreign key (bidder, post_id) references bids (user_email, post_id)
+    ON DELETE CASCADE
 );
 
 create trigger add_notification after insert on bids
