@@ -84,14 +84,18 @@ def add_entry():
     return redirect(url_for('show_entries'))
 
 
-def db_execute(query, params):
+def db_execute(query, params=None):
     try:
         db = get_db()
-        results = db.execute(query, params).fetchall()
+        if params:
+            results = db.execute(query, params).fetchall()
+        else:
+            results = db.execute(query).fetchall()
         db.commit()
+        return results
     except Exception as e:
         flash(str(e))
-    return results
+        return None
 
 
 import views.posts
