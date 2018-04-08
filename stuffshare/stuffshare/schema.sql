@@ -48,6 +48,12 @@ create table notifications (
     foreign key (bidder, post_id) references bids (user_email, post_id)
 );
 
+create trigger add_notification after insert on bids
+  begin
+    insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+  end;
+
+
 insert into notifications
 (bidder, post_id)
 values
