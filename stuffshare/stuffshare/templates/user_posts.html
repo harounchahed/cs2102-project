@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block body %} {% if session.logged_in %}
-<h1>Create new post</h1>
+<h2>Create new post</h2>
 <form action="add_post" method=post class=add-entry>
     <dl>
         <dt>Title:
@@ -16,7 +16,7 @@
     </dl>
 </form>
 {% endif %}
-<h1>Your posts</h1>
+<h2>My posts</h2>
 
 {% if posts %}
 <ul class=entries>

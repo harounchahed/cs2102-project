@@ -39,14 +39,14 @@ def delete_post(user_email, post_id):
     return redirect(url_for('show_user_posts', user_email=user_email))
 
 
-@app.route('/add_post', methods=['POST'])
-def add_post():
+@app.route('/<string:user_email>/add_post', methods=['POST'])
+def add_post(user_email):
     if not session.get('logged_in'):
         flash("Please log in to your account.")
     else:
         if db_execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)', [request.form['title'], request.form['desc'], session['user_email'], request.form['price']]) is not None:
             flash('New post was successfully created')
-    return redirect(url_for('show_posts'))
+    return redirect(url_for('show_user_posts', user_email=user_email))
 
 
 @app.route('/posts/<int:id>', methods=['GET'])
@@ -62,27 +62,30 @@ def post_detail(id):
     return render_template('post_detail.html', post=post[0], bids=bids)
 
 
-@app.route('/<string:user_email>/posts', methods=['GET'])
+@app.route('/<string:user_email>/posts', methods=['GET', 'POST'])
 def show_user_posts(user_email):
-    posts_rows = db_execute(
-        'select * from posts where user_email = ? order by id desc', [user_email])
-    posts = []
-    if posts_rows is not None:
-        for post in posts_rows:
-            bids = db_execute(
-                'select * from bids where post_id = ?', [post["id"]])
-            if bids is not None:
-                posts.append(dict(id=post["id"],
-                                  user_email=post["user_email"],
-                                  title=post["title"],
-                                  price=post["price"],
-                                  desc=post["description"],
-                                  no_bids=len(bids)))
-            else:
-                posts.append(dict(id=post["id"],
-                                  user_email=post["user_email"],
-                                  title=post["title"],
-                                  price=post["price"],
-                                  desc=post["description"],
-                                  no_bids=0))
-    return render_template('user_posts.html', posts=posts, user_email=user_email)
+    if request.method == 'POST':
+        return redirect(url_for(add_post))
+    else:
+        posts_rows = db_execute(
+            'select * from posts where user_email = ? order by id desc', [user_email])
+        posts = []
+        if posts_rows is not None:
+            for post in posts_rows:
+                bids = db_execute(
+                    'select * from bids where post_id = ?', [post["id"]])
+                if bids is not None:
+                    posts.append(dict(id=post["id"],
+                                      user_email=post["user_email"],
+                                      title=post["title"],
+                                      price=post["price"],
+                                      desc=post["description"],
+                                      no_bids=len(bids)))
+                else:
+                    posts.append(dict(id=post["id"],
+                                      user_email=post["user_email"],
+                                      title=post["title"],
+                                      price=post["price"],
+                                      desc=post["description"],
+                                      no_bids=0))
+        return render_template('user_posts.html', posts=posts, user_email=user_email)
