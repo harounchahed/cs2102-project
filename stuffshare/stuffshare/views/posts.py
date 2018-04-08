@@ -5,13 +5,14 @@ from login import logged_in
 @app.route('/')
 def show_posts():
     posts_rows = db_execute(
-        'select * from posts order by id desc')
+        'select *, (select name from users where email = user_email) name from posts order by id desc')
     posts = []
     for post in posts_rows:
         bids = db_execute(
             'select * from bids where post_id = ?', [post["id"]])
         if bids is not None:
             posts.append(dict(id=post["id"],
+                              name=post['name'],
                               user_email=post["user_email"],
                               title=post["title"],
                               price=post["price"],
@@ -19,6 +20,7 @@ def show_posts():
                               no_bids=len(bids)))
         else:
             posts.append(dict(id=post["id"],
+                              name=post['name'],
                               user_email=post["user_email"],
                               title=post["title"],
                               price=post["price"],
