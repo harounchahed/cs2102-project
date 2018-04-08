@@ -45,16 +45,16 @@ def add_post(user_email):
         flash("Please log in to your account.")
     else:
         if db_execute('insert into posts (title, description, user_email, price) values (?, ?, ?, ?)', [request.form['title'], request.form['desc'], session['user_email'], request.form['price']]) is not None:
-            flash('New post was successfully created')
+            flash('New post was successfully created.')
     return redirect(url_for('show_user_posts', user_email=user_email))
 
 
 @app.route('/posts/<int:id>', methods=['GET'])
 def post_detail(id):
     post = db_execute(
-        'select * from posts where id = ?', [id])
+        'select *, (select name from users where email = user_email) name from posts where id = ?', [id])
     bids = db_execute(
-        'select * from bids where post_id = ?', [id])
+        'select *, (select name from users where email = user_email) name from bids where post_id = ?', [id])
     if not post:
         flash("Sorry, that item does not exist")
         return redirect(url_for('show_posts'))
