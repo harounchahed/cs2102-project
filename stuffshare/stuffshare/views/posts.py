@@ -64,28 +64,25 @@ def post_detail(id):
 
 @app.route('/<string:user_email>/posts', methods=['GET', 'POST'])
 def show_user_posts(user_email):
-    if request.method == 'POST':
-        return redirect(url_for(add_post))
-    else:
-        posts_rows = db_execute(
-            'select * from posts where user_email = ? order by id desc', [user_email])
-        posts = []
-        if posts_rows is not None:
-            for post in posts_rows:
-                bids = db_execute(
-                    'select * from bids where post_id = ?', [post["id"]])
-                if bids is not None:
-                    posts.append(dict(id=post["id"],
-                                      user_email=post["user_email"],
-                                      title=post["title"],
-                                      price=post["price"],
-                                      desc=post["description"],
-                                      no_bids=len(bids)))
-                else:
-                    posts.append(dict(id=post["id"],
-                                      user_email=post["user_email"],
-                                      title=post["title"],
-                                      price=post["price"],
-                                      desc=post["description"],
-                                      no_bids=0))
-        return render_template('user_posts.html', posts=posts, user_email=user_email)
+    posts_rows = db_execute(
+        'select * from posts where user_email = ? order by id desc', [user_email])
+    posts = []
+    if posts_rows is not None:
+        for post in posts_rows:
+            bids = db_execute(
+                'select * from bids where post_id = ?', [post["id"]])
+            if bids is not None:
+                posts.append(dict(id=post["id"],
+                                  user_email=post["user_email"],
+                                  title=post["title"],
+                                  price=post["price"],
+                                  desc=post["description"],
+                                  no_bids=len(bids)))
+            else:
+                posts.append(dict(id=post["id"],
+                                  user_email=post["user_email"],
+                                  title=post["title"],
+                                  price=post["price"],
+                                  desc=post["description"],
+                                  no_bids=0))
+    return render_template('user_posts.html', posts=posts, user_email=user_email)
