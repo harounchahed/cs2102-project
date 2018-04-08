@@ -1,17 +1,20 @@
+:root {
+  --themeColor: #e62929;
+}
+
 body {
   font-family: 'Open Sans';
   background: #eee;
 }
 a,
 h1 {
-  color: #377ba8;
+  color: var(--themeColor);
 }
 h1 a, h3 a{
   text-decoration: none;
   font-size: 1.3em;
 }
 h3 .delete_post {
-  vertical-align:middle;
   color: rgba(223, 0, 0);
   opacity: 0.5;
 }
@@ -25,10 +28,15 @@ h2 {
   margin: 0;
 }
 h1 {
-  border-bottom: 2px solid #eee;
+  font-size: 3em;
 }
 h2 {
   font-size: 1.2em;
+}
+.menubar {
+  position: sticky;
+  top: 0px;
+  background-color: #ffffff; 
 }
 
 .page {
@@ -61,8 +69,7 @@ h2 {
   font-size: 0.8em;
   padding: 0.3em;
   border: 2px solid #e0e0e0;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   background: #fafafa;
 }
 .flash {
@@ -90,10 +97,17 @@ h2 {
   padding: 0.5em;
 }
 
+.post-title {
+  color: var(--themeColor);
+  font-size: 2em;
+  text-decoration: None;
+}
+
 .post-price {
   float: right;
-  color: #377ba8;
+  color: var(--themeColor);
 }
+
 
 .post-desc {
   display: block;
@@ -108,7 +122,12 @@ h2 {
   color: var(--no-bid-color);
   margin-top: 5px;
 }
-.profile {
+
+.logged-in-user {
   float: left;
 }
 
+.menubutton {
+  margin-left: 10px;
+  text-decoration: None;
+}

@@ -1,17 +1,17 @@
 {% extends "layout.html" %} {% block body %}
-<h1 class=post-title>
+<h2 class=post-title>
     {{ post.title }}
-</h1>
+</h2>
 <div class=post-price>${{ post.price }}</div>
 <div class=post-desc>{{ post.desc|safe }}</div>
-<div class=post-user>Posted by: {{ post.user_email }}</div>
+<div class=post-user>Posted by: {{ post.name }}</div>
 {% if session.logged_in and session.user_email == post.user_email %}
-<a href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">Delete my post</a> {% endif %}
+<a href="{{ url_for('delete_post', user_email = post.user_email, post_id = post.id) }}">Delete post</a> {% endif %}
 <h4>Bids:</h4>
 {% set flag = namespace(made_bid=false) %} {% if bids %}
 <ul>{% for bid in bids %}
-    <li>{{ bid.user_email }} offered {{ bid.offer }}. {% if session.logged_in and session.user_email == bid.user_email %} {%
-        set flag.made_bid=true %}
+    <li>{{ bid.name }} offered {{ bid.offer }}. {% if session.logged_in and session.user_email == bid.user_email %} {% set flag.made_bid=true
+        %}
         <a href="{{ url_for('delete_bid', user_email = bid.user_email, post_id = bid.post_id) }}">Delete my bid</a>
         {% endif %}
     </li>
