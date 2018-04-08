@@ -17,15 +17,14 @@
 </form>
 {% endif %}
 <h1>Your posts</h1>
+
+{% if posts %}
 <ul class=entries>
     {% for post in posts %}
     <li>
         <h3 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
         </h3>
-        {% if session.logged_in and session.user_email == user_email %}
-        <a href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">Delete my post</a>
-        {% endif %}
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>
@@ -33,9 +32,11 @@
         <div class=no-bids>{{ post.no_bids }} bids</div>
         {% elif post.no_bids == 1 %}
         <div class=no-bids>{{ post.no_bids }} bid</div>
-        {% endif %} {% else %}
-        <em>Unbelievable. No posts here so far.</em>
-        {% endfor %}
+        {% endif %} {% if session.logged_in and session.user_email == user_email %}
+        <a href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">Delete my post</a> {% endif %}
     </li>
+    {% endfor %}
 </ul>
-{% endblock %}
+{% else %}
+<em>Unbelievable. No posts here so far.</em>
+{% endif %} {% endblock %}
