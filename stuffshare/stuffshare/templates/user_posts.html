@@ -22,12 +22,12 @@
 <ul class=entries>
     {% for post in posts %}
     <li>
-        <h3 class=post-title>
+        <h2 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
             <a title="Delete post." class=delete_post href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">
                 <i class=material-icons>cancel</i>
             </a>
-        </h3>
+        </h2>
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>

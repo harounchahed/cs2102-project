@@ -1,22 +1,21 @@
 :root {
-  --themeColor: #e62929;
+  --themeColor: #34a4ff;
 }
 
 body {
   font-family: 'Open Sans';
   background: #eee;
 }
-a,
-h1 {
-  color: var(--themeColor);
-}
+
 h1 a, h3 a{
   text-decoration: none;
   font-size: 1.3em;
+  color: var(--themeColor);
 }
-h3 .delete_post {
-  color: rgba(223, 0, 0);
+.delete_post i {
+  color: var(--themeColor);
   opacity: 0.5;
+  z-index: -10;
 }
 h3 .delete_post:hover {
   opacity: 1;
@@ -31,14 +30,13 @@ h1 {
   font-size: 3em;
 }
 h2 {
-  font-size: 1.2em;
+  font-size: 1em;
 }
 .menubar {
   position: sticky;
   top: 0px;
-  background-color: #ffffff; 
+  background-color: #ffffffee; 
 }
-
 .page {
   margin: 2em auto;
   width: 35em;
@@ -69,8 +67,8 @@ h2 {
   font-size: 0.8em;
   padding: 0.3em;
   border: 2px solid #e0e0e0;
-  margin-bottom: 2em;
   background: #fafafa;
+  margin-bottom: 1em;
 }
 .flash {
   background: #cee5f5;
@@ -97,10 +95,11 @@ h2 {
   padding: 0.5em;
 }
 
-.post-title {
+.post-title, .post-title a {
   color: var(--themeColor);
-  font-size: 2em;
+  font-size: 1.2em;
   text-decoration: None;
+  padding-left: 10px;
 }
 
 .post-price {
@@ -117,8 +116,8 @@ h2 {
   --no-bid-color: rgb(88, 206, 77);
   display: inline-block;
   border: 2px solid var(--no-bid-color);
-  border-radius: 18px;
-  padding: 10px 8px 8px 8px;
+  border-radius: 20px;
+  padding: 6px 12px 5px 12px;
   color: var(--no-bid-color);
   margin-top: 5px;
 }

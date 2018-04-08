@@ -8,7 +8,7 @@
         </h2>
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
-        <div class=post-user>Posted by: {{ post.user_email }}</div>
+        <div class=post-user>Posted by: {{ post.name }}</div>
         {% if post.no_bids > 1 %}
         <div class=no-bids>{{ post.no_bids }} bids</div>
         {% elif post.no_bids == 1 %}
