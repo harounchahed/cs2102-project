@@ -1,8 +1,11 @@
 <!doctype html>
 <title>StuffShare App</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class=page>
-  <h1>Our StuffShare App</h1>
+  <h1>
+    <a href="{{ url_for('show_posts') }}">Our StuffShare App</a>
+  </h1>
   <div class=metanav>
     {% if not session.logged_in %}
     <a href="{{ url_for('login') }}">log in</a>
@@ -17,7 +20,12 @@
   <div class=flash>{{ message }}</div>
   {% endfor %} {% if notifications and session.logged_in %} {% for notification in notifications %}
   <div class=notif>{{ notification['message'] }}
-    <a href="{{ url_for('delete_notification', bidder=notification['bidder'], post_id=notification['post_id']) }}">dismiss</a>
+    <a href="{{ url_for('post_detail', id=notification['post_id']) }}">
+      <b>{{ notification['title'] }}</b>.</a>
+    <a class=dismiss href="{{ url_for('delete_notification', bidder=notification['bidder'], post_id=notification['post_id']) }}">
+      <i class="material-icons">close</i>
+    </a>
+
   </div>
   {% endfor %} {% endif %} {% block body %}{% endblock %}
 </div>
