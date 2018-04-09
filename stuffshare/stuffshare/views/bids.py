@@ -35,3 +35,21 @@ def delete_bid(user_email, post_id):
                       [user_email, post_id]) != None:
             flash('Your bid has been deleted.')
     return redirect(url_for('post_detail', id=post_id))
+
+
+@app.route('/accept_bid/<string:bidder_email>/<int:post_id>', methods=['GET'])
+def accept_bid(bidder_email, post_id):
+    if not session.get('logged_in'):
+        flash("Sorry, you must log in.")
+    else:
+        op = db_execute('select user_email from posts where id = ?', [post_id])
+        if op is None or session['user_email'] != op[0]['user_email']:
+            flash('%s' % op[0]['user_email'])
+            flash("Sorry, you can only accept bids on your own posts.")
+        else:
+            if db_execute('insert into accepted_bids (user_email, post_id) values (?, ?)',
+                          [bidder_email, post_id]) != None:
+                flash('You have accepted %s\'s bid.' % (bidder_email))
+            else:
+                flash('(You have already accepted a bid on this post.)')
+    return redirect(url_for('post_detail', id=post_id))

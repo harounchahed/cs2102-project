@@ -1,23 +1,37 @@
-{% extends "layout.html" %} {% block body %}
+{% extends "layout.html" %} {% block body %} {% set flag = namespace(made_bid=false, my_post=false) %} {% if session.logged_in
+and session.user_email == post.user_email %}{% set flag.my_post = true %}{% endif %}
 <ul class=entries>
     <li>
         <h2 class=post-title>
-            {{ post.title }}
+            <a>{{ post.title }}</a>
         </h2>
-        <div class=post-price>${{ post.price }}</div>
-        <div class=post-desc>{{ post.desc|safe }}</div>
-        <div class=post-user>Posted by: {{ post.name }}</div>
-        {% if session.logged_in and session.user_email == post.user_email %}
-        <a href="{{ url_for('delete_post', user_email = post.user_email, post_id = post.id) }}">Delete post</a> {% endif %}
+        <span class=post-price>${{ post.price }}</span>
+        <div class=post-user>{{ post.name }}</div>
+        <div class=post-desc>
+            {{ post.description|safe }}
+        </div>
+        {% if flag.my_post is sameas true %}
+        <a href="{{ url_for('delete_post', user_email = post.user_email, post_id = post.id) }}">
+            <button>Delete post</button>
+        </a>
+        {% endif %}
     </li>
 </ul>
 <p>Bids:</p>
-{% set flag = namespace(made_bid=false) %} {% if bids %}
+{% if bids %}
 <ul>{% for bid in bids %}
     <li>{{ bid.name }} offered {{ bid.offer }}. {% if session.logged_in and session.user_email == bid.user_email %} {% set flag.made_bid=true
         %}
-        <a href="{{ url_for('delete_bid', user_email = bid.user_email, post_id = bid.post_id) }}">Delete my bid</a>
-        {% endif %}
+        <a href="{{ url_for('delete_bid', user_email = bid.user_email, post_id = bid.post_id) }}">
+            <button>Delete my bid</button>
+        </a>
+        {% endif %} {% if flag.my_post is sameas true %} {% if accepted_bidder and accepted_bidder == bid.user_email %}
+        <br>
+        <span class=accepted-tag>You've accepted this bid. </span>{% else %}
+        <a href="{{url_for('accept_bid', bidder_email = bid.user_email, post_id = bid.post_id)}}">
+            <button>Accept this bid</button>
+        </a>
+        {% endif %} {% endif %}
     </li>
     {% endfor %}
 </ul>
