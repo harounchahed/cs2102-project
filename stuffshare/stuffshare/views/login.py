@@ -38,7 +38,6 @@ def login():
 
 @app.route('/delete_account')
 def delete_account():
-<<<<<<< HEAD
       db = get_db()
       db.execute('delete from users where email = ?', [session['user_email']])
       db.commit() 
@@ -46,14 +45,12 @@ def delete_account():
       session.pop('user', None) 
       flash('Your account has been deleted')
       return redirect(url_for('show_entries'))
-=======
-    if db_execute('delete from users where email = ?', [session['user_email']]) is not None:
+      if db_execute('delete from users where email = ?', [session['user_email']]) is not None:
         session.pop('logged_in', None)
         session.pop('user_email', None)
         session.pop('name', None)
         flash('Your account has been deleted.')
-    return redirect(url_for('show_entries'))
->>>>>>> b3736a6391db4aada2c7ce82587e47aa410d2b41
+      return redirect(url_for('show_entries'))
 
 
 @app.route('/logout')
