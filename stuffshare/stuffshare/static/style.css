@@ -1,10 +1,19 @@
 :root {
   --themeColor: #34a4ff;
+  --themeColorOp: #94cfff;
+  --themeBg: #f1f8ff;
 }
 
 body {
-  font-family: 'Open Sans';
-  background: #eee;
+  font-family: 'Open Sans', sans-serif;
+  background: var(--themeBg);
+}
+h1, h2 {
+  margin: 0px;
+}
+
+h2 {
+  padding-left: 15px;
 }
 
 h1 a, h3 a{
@@ -15,33 +24,25 @@ h1 a, h3 a{
 .delete_post i {
   color: var(--themeColor);
   opacity: 0.5;
-  z-index: -10;
 }
 h3 .delete_post:hover {
   opacity: 1;
 }
 
-h1,
-h2 {
-  font-family: 'Open Sans', sans-serif;
-  margin: 0;
-}
 h1 {
   font-size: 3em;
 }
-h2 {
-  font-size: 1em;
-}
+
 .menubar {
   position: sticky;
   top: 0px;
   background-color: #ffffffee; 
 }
 .page {
-  margin: 2em auto;
+  margin: 1.2em auto;
   width: 35em;
-  border: 5px solid #ccc;
-  padding: 0.8em;
+  border: 10px solid var(--themeColorOp);
+  padding: 1em;
   background: white;
 }
 .entries {

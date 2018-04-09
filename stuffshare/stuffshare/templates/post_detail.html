@@ -11,7 +11,7 @@
         <a href="{{ url_for('delete_post', user_email = post.user_email, post_id = post.id) }}">Delete post</a> {% endif %}
     </li>
 </ul>
-<h4>Bids:</h4>
+<p>Bids:</p>
 {% set flag = namespace(made_bid=false) %} {% if bids %}
 <ul>{% for bid in bids %}
     <li>{{ bid.name }} offered {{ bid.offer }}. {% if session.logged_in and session.user_email == bid.user_email %} {% set flag.made_bid=true

@@ -8,7 +8,7 @@ def inject_notification_generator():
             'select bidder, post_id, (select title from posts where id = post_id) title from notifications where post_id in (select id from posts where user_email = ?)', [session['user_email']])
         notifications = []
         for row in notification_rows:
-            message = "%s has made a bid on your post:" % (
+            message = "%s made a bid on your post:" % (
                 row['bidder'])
             notifications.append(dict(
                 message=message, bidder=row['bidder'], post_id=row['post_id'], title=row['title']))
