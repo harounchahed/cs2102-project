@@ -58,9 +58,21 @@ create table notifications (
     ON DELETE CASCADE
 );
 
+create trigger check_if_already_accepted before insert on bids
+when exists (select * from accepted_bids where post_id = new.post_id) 
+  begin
+      select raise(FAIL, "Post has been closed.");
+  end;
+
+create trigger check_bid_own_post before insert on bids
+when new.user_email = (select user_email from posts where id = new.post_id)
+  begin
+      select raise(FAIL, "You cannot bid on your own post.");
+  end;
+
 create trigger created_bid_notif after insert on bids
   begin
-    insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+    insert into notifications values ((select name from users where email = new.user_email), new.post_id);
   end;
 
 -- create trigger updated_bid_notif after update on bids
@@ -143,7 +155,6 @@ values
 ('Jeremy@gmail.com', 1, 90),
 ('Haroun@gmail.com', 1, 90),
 ('Haroun@gmail.com', 2, 92),
-('Barack@gmail.com', 3,31  ),
 ('Haroun@gmail.com',3,32 ),
 ('Jeremy@gmail.com',3, 33),
 ('Ewelina@gmail.com',4,302 ),
@@ -170,7 +181,6 @@ values
 ('Geoffery@gmail.com',17,570 ),
 ('suzan@gmail.com',18,600),
 ('nathanial@yahoo.com',18,610),
-('joeyeo@yahoo.com' ,18,620 ),
 ('jonathanlim@gmail.com' ,18,630 ),
 ('russelcrow@gmail.com' ,18,640 ),
 ('stephenieteng@yahoo.com' ,18,650 ),
@@ -184,11 +194,9 @@ values
 ('suzan@gmail.com',20,650 ),
 ('nathanial@yahoo.com' ,20,660 ),
 ('joeyeo@yahoo.com' ,20,670 ),
-('jonathanlim@gmail.com' ,20,680 ),
 ('russelcrow@gmail.com' ,20,690 ),
 ('stephenieteng@yahoo.com' ,20,700 ),
 ('tiongley@yahoo.com' ,21, 660),
-('isabelletan@yahoo.com' ,21,670 ),
 ('xuekai@gmail.com' ,21,680 ),
 ('abhiparikh@gmail.com' ,21,690 ),
 ('gracelim@yahoo.com' ,21,700 ),
