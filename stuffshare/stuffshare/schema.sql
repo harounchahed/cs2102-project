@@ -6,26 +6,35 @@ create table entries (
   'text' text not null
 );
 
--- our project schema
--- sql only allows one drop at a time
+-- sqlite3 only allows one drop at a time
 drop table if exists posts;
 drop table if exists users;
 drop table if exists bids;
+drop table if exists accepted_bids;
 drop table if exists notifications;
 
 create table users (
     email char(100) primary key,
-    name char(100)  not null,
+    'name' char(100) not null,
     password_hash text
 );
 
 create table posts (
     id integer primary key, -- default autoincrements, so do not supply a value. See https://sqlite.org/autoinc.html.
     title char(100) not null,
-    description text,
+    'description' text,
     user_email char(100) not null,
     price numeric not null,
     foreign key (user_email) references users (email)
+    ON DELETE CASCADE
+);
+
+-- we have accepted bids rather than accepted boolean as it is a (0, 1) relationship which is represented naturally by a referencing relation and unique constraint.  
+create table accepted_bids (
+    user_email char(100),
+    post_id integer unique, -- this constraint ensures we only have one accepted bid per post.  
+    primary key (user_email, post_id),
+    foreign key (user_email, post_id) references bids (user_email, post_id)
     ON DELETE CASCADE
 );
 
@@ -33,7 +42,7 @@ create table bids (
     user_email char(100),
     post_id integer,
     offer numeric not null,
-    accepted integer default 0, -- sqlite does NOT have a boolean type. See http://www.sqlite.org/datatype3.html.
+    --accepted integer default 0, -- sqlite does NOT have a boolean type. See http://www.sqlite.org/datatype3.html.
     primary key (user_email, post_id),
     foreign key (user_email) references users (email)
     ON DELETE CASCADE,
@@ -49,10 +58,30 @@ create table notifications (
     ON DELETE CASCADE
 );
 
-create trigger add_notification after insert on bids
+create trigger created_bid_notif after insert on bids
   begin
     insert into notifications values ((select name from users where new.user_email = email), new.post_id);
   end;
+
+-- create trigger updated_bid_notif after update on bids
+--   begin
+--     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+--   end;
+
+-- create trigger accepted_bid_notif after insert on accepted_bids
+--   begin
+--     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+--   end;
+
+-- create trigger deleted_bid_notif after delete on bids
+--   begin
+--     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+--   end;
+
+-- create trigger deleted_post_notif after delete on posts
+--   begin
+--     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
+--   end;
 
 
 insert into notifications
