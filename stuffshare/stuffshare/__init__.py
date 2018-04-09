@@ -84,9 +84,25 @@ def add_entry():
     return redirect(url_for('show_entries'))
 
 
+def db_execute(query, params=None):
+    try:
+        db = get_db()
+        if params:
+            results = db.execute(query, params).fetchall()
+        else:
+            results = db.execute(query).fetchall()
+        db.commit()
+        return results
+    except Exception as e:
+        flash(str(e))
+        return None
+
+
 import views.posts
 import views.login
 import views.bids
+import views.notifications
+
 
 if __name__ == '__main__':
     app.run()

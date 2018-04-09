@@ -1,29 +1,11 @@
-{% extends "layout.html" %} {% block body %} {% if session.logged_in %}
-<h1>Create new post</h1>
-<form action="add_post" method=post class=add-entry>
-    <dl>
-        <dt>Title:
-            <dd>
-                <input type=text size=30 name=title>
-                <dt>Description:
-                    <dd>
-                        <textarea name=desc rows=5 cols=40></textarea>
-                        <dt>Price:
-                            <dd>
-                                <input type=number name=price rows=5 cols=40>
-                                <dd>
-                                    <input type=submit value="Create post">
-    </dl>
-</form>
-{% endif %}
-<h1>Browse posts</h1>
+{% extends "layout.html" %} {% block body %}
+<h2>All posts</h2>
 <ul class=entries>
     {% for post in posts %}
     <li>
-        <h3 class=post-title>
+        <h2 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
-        </h3>
-
+        </h2>
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>

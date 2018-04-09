@@ -2,20 +2,21 @@
 <h2>Edit Profile</h2>
 {% if error %}
 <p class=error>
-    <strong>Error:</strong> {{ error }}{% endif %}
-    <form action="{{ url_for('editprofile') }}" method=post>
-        <dl>
-            <dt>Name:
-                <dd>
-                    <input type=text name=name value="{{ session['name'] }}">
-                    <dt>Email:
-                        <dd>
-                            <input type=text name=user_email value="{{ session['user_email'] }}">
-                            <dt>Password:
+    <strong>Error:</strong> {{ error }}</p>{% endif %}
+<a href="{{ url_for('delete_account') }}"> delete account</a>
+<form action="{{ url_for('editprofile') }}" method=post>
+    <dl>
+        <dt>Name:
+            <dd>
+                <input type=text name=name value="{{ session['name'] }}">
+                <dt>Email:
+                    <dd>
+                        <input type=text name=user_email value="{{ session['user_email'] }}">
+                        <dt>Password:
+                            <dd>
+                                <input type=password name=password required>
                                 <dd>
-                                    <input type=password name=password required>
-                                    <dd>
-                                        <input type=submit value=Submit>
-        </dl>
-    </form>
-    {% endblock %}
+                                    <input type=submit value=Submit>
+    </dl>
+</form>
+{% endblock %}

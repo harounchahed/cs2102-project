@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block body %} {% if session.logged_in %}
-<h1>Create new post</h1>
+<h2>Create new post</h2>
 <form action="add_post" method=post class=add-entry>
     <dl>
         <dt>Title:
@@ -16,16 +16,18 @@
     </dl>
 </form>
 {% endif %}
-<h1>Browse posts</h1>
+<h2>My posts</h2>
+
+{% if posts %}
 <ul class=entries>
     {% for post in posts %}
     <li>
         <h3 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
+            <a title="Delete post." class=delete_post href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">
+                <i class=material-icons>cancel</i>
+            </a>
         </h3>
-        {% if session.logged_in and session.user_email == user_email %}
-        <a href="{{ url_for('delete_post', user_email = user_email, post_id = post.id) }}">Delete my post</a>
-        {% endif %}
         <div class=post-price>${{ post.price }}</div>
         <div class=post-desc>{{ post.desc|safe }}</div>
         <div class=post-user>Posted by: {{ post.user_email }}</div>
@@ -33,9 +35,10 @@
         <div class=no-bids>{{ post.no_bids }} bids</div>
         {% elif post.no_bids == 1 %}
         <div class=no-bids>{{ post.no_bids }} bid</div>
-        {% endif %} {% else %}
-        <em>Unbelievable. No posts here so far.</em>
-        {% endfor %}
+        {% endif %}
     </li>
+    {% endfor %}
 </ul>
-{% endblock %}
+{% else %}
+<em>Please log in.</em>
+{% endif %} {% endblock %}

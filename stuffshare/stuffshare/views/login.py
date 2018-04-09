@@ -22,9 +22,9 @@ def login():
         db = get_db()
         login_user_email = request.form['user_email']
         login_password = request.form['password']
-        user_emails = db.execute(
-            'select * from users where email = ?', [login_user_email]).fetchall()
-        if not user_emails and login_user_email != app.config['USERNAME']:
+        user_emails = db_execute(
+            'select * from users where email = ?', [login_user_email])
+        if user_emails is None and login_user_email != app.config['USERNAME']:
             flash('Sorry, the account "{}" does not exist.'.format(login_user_email))
         elif login_password != "password":
             error = "Invalid password"
@@ -32,12 +32,13 @@ def login():
             session['logged_in'] = True
             session['user_email'] = request.form['user_email']
             session['name'] = user_emails[0]["name"]
-            flash('Logged in')
+            flash('Logged in.')
             return redirect(url_for('show_posts'))
     return render_template('login.html', error=error)
 
 @app.route('/delete_account')
 def delete_account():
+<<<<<<< HEAD
       db = get_db()
       db.execute('delete from users where email = ?', [session['user_email']])
       db.commit() 
@@ -45,6 +46,14 @@ def delete_account():
       session.pop('user', None) 
       flash('Your account has been deleted')
       return redirect(url_for('show_entries'))
+=======
+    if db_execute('delete from users where email = ?', [session['user_email']]) is not None:
+        session.pop('logged_in', None)
+        session.pop('user_email', None)
+        session.pop('name', None)
+        flash('Your account has been deleted.')
+    return redirect(url_for('show_entries'))
+>>>>>>> b3736a6391db4aada2c7ce82587e47aa410d2b41
 
 
 @app.route('/logout')
@@ -69,12 +78,10 @@ def signup():
         signup_name = request.form['name']
         signup_user_email = request.form['user_email']
         signup_password = request.form['password']
-        db = get_db()
-        db.execute('insert into users (email, name, password_hash) values (?, ?, ?)',
-                   [signup_user_email, signup_name, signup_password])
-        db.commit()
-        flash('Welcome to stuffshare!')
-        return redirect(url_for('login'))
+        if db_execute('insert into users (email, name, password_hash) values (?, ?, ?)',
+                      [signup_user_email, signup_name, signup_password]) is not None:
+            flash('Welcome to stuffshare!')
+            return redirect(url_for('show_posts'))
     return render_template("signup.html")
 
 
@@ -85,13 +92,9 @@ def editprofile():
         new_name = request.form['name']
         new_user_email = request.form['user_email']
         new_password = request.form['password']
-        try:
-            db.execute('UPDATE users SET  email= ?, name = ?, password_hash = ? WHERE email = ?',
-                       [new_user_email, new_name, new_password, session['user_email']])
-            db.commit()
+        if db_execute('UPDATE users SET email= ?, name = ?, password_hash = ? WHERE email = ?',
+                      [new_user_email, new_name, new_password, session['user_email']]) is not None:
             session['user_email'] = new_user_email
             session['name'] = new_name
             flash('Profile successfully updated!')
-        except Exception as e:
-            flash(str(e))
     return render_template("editprofile.html")

@@ -10,19 +10,18 @@ create table entries (
 -- sql only allows one drop at a time
 drop table if exists posts;
 drop table if exists users;
-drop table if exists bids;
-drop table if exists notifications;
+drop table if exists bids; 
 
 create table users (
     email char(100) primary key,
     name char(100)  not null,
-    password_hash text
-);
-
+    password_hash text 
+); 
+ 
 create table posts (
-    id integer primary key, -- default autoincrements, so do not supply a value. See https://sqlite.org/autoinc.html.
+    id integer primary key, -- default autoincrements, so do not supply a value. See https://sqlite.org/autoinc.html. 
     title char(100) not null,
-    description text,
+    description text, 
     user_email char(100) not null,
     price numeric not null,
     foreign key (user_email) references users (email)
@@ -33,27 +32,14 @@ create table bids (
     user_email char(100),
     post_id integer,
     offer numeric not null,
-    accepted integer default 0, -- sqlite does NOT have a boolean type. See http://www.sqlite.org/datatype3.html.
+    accepted integer default 0, -- sqlite does NOT have a boolean type. See http://www.sqlite.org/datatype3.html. 
     primary key (user_email, post_id),
-    foreign key (user_email) references users (email)
-    ON DELETE CASCADE,
+    foreign key (user_email) references users (email),
+    ON DELETE CASCADE
     foreign key (post_id) references posts (id)
     ON DELETE CASCADE
-);
+); 
 
-create table notifications (
-    bidder char(100),
-    post_id integer,
-    primary key (bidder, post_id),
-    foreign key (bidder, post_id) references bids (user_email, post_id)
-);
-
-insert into notifications
-(bidder, post_id)
-values
-('Haroun@gmail.com', 1);
-
-<<<<<<< HEAD
 create table closed_post (
     post_id integer,
     owner_email char(100),
@@ -63,21 +49,17 @@ create table closed_post (
     ON DELETE CASCADE
     foreign key (owner_email) references users(email), -- think whether to add any "on delete" action
     foreign key (winner_email) references users(email) -- same as above
-
 )
 
 insert into users 
-=======
-insert into users
->>>>>>> 78bd2db4f89e6a09ebbb1e67502bf26787660e1c
 (email, name)
-values
-('Barack@gmail.com', 'Barack Obama'),
+values 
+('Barack@gmail.com', 'Barack Obama'), 
 ('Haroun@gmail.com', 'Haroun Chahed'),
-('Jeremy@gmail.com', 'Jeremy Yew'),
-('Ewelina@gmail.com', 'Ewelina'),
+('Jeremy@gmail.com', 'Jeremy Yew'), 
+('Ewelina@gmail.com', 'Ewelina'), 
 ('Geoffery@gmail.com', 'Goeffery'),
-('suzan@gmail.com', 'suzan lim'),
+('suzan@gmail.com', 'suzan lim'), 
 ('nathanial@yahoo.com' , 'Nathanial Mah'),
 ('joeyeo@yahoo.com' , 'Joe Yeo'),
 ('jonathanlim@gmail.com' , 'Jonathan Lim'),
@@ -90,7 +72,7 @@ values
 ('gracelim@yahoo.com' , 'Grace Lim'),
 ('deandramuliawan@gmail.com' , 'Deandra Muliawan');
 
-insert into posts
+insert into posts 
 (id,title, description, user_email, price) -- id should not be supplied
 values
 (1,'football', 'adidas white football', 'Barack@gmail.com' , 10),
@@ -117,18 +99,18 @@ values
 (22,'ski set', 'best ski set on the market', 'deandramuliawan@gmail.com' , 680),
 (23,'tennis racket', 'willson, new!', 'abhiparikh@gmail.com' , 730);
 
-insert into bids
+insert into bids 
 (user_email, post_id, offer) -- accepted is 0 by default
-values
-('Jeremy@gmail.com', 1, 90),
+values 
+('Jeremy@gmail.com', 1, 90), 
 ('Haroun@gmail.com', 1, 90),
 ('Haroun@gmail.com', 2, 92),
-('Barack@gmail.com', 3,31  ),
+('Barack@gmail.com', 3,31  ), 
 ('Haroun@gmail.com',3,32 ),
-('Jeremy@gmail.com',3, 33),
-('Ewelina@gmail.com',4,302 ),
+('Jeremy@gmail.com',3, 33), 
+('Ewelina@gmail.com',4,302 ), 
 ('Geoffery@gmail.com',4,303 ),
-('suzan@gmail.com',4,304 ),
+('suzan@gmail.com',4,304 ), 
 ('nathanial@yahoo.com' ,5, 306),
 ('joeyeo@yahoo.com' ,6, 311 ),
 ('jonathanlim@gmail.com' ,6, 312),
@@ -140,15 +122,15 @@ values
 ('abhiparikh@gmail.com' ,9,3001 ),
 ('gracelim@yahoo.com' ,9,3100 ),
 ('deandramuliawan@gmail.com' ,9, 3200),
-('Jeremy@gmail.com', 10, 90),
+('Jeremy@gmail.com', 10, 90), 
 ('Haroun@gmail.com', 11, 490),
 ('Haroun@gmail.com', 12, 490),
-('Barack@gmail.com', 13,460 ),
+('Barack@gmail.com', 13,460 ), 
 ('Haroun@gmail.com',14, 490),
-('Jeremy@gmail.com', 15,510 ),
-('Ewelina@gmail.com',16,540 ),
+('Jeremy@gmail.com', 15,510 ), 
+('Ewelina@gmail.com',16,540 ), 
 ('Geoffery@gmail.com',17,570 ),
-('suzan@gmail.com',18,600),
+('suzan@gmail.com',18,600), 
 ('nathanial@yahoo.com',18,610),
 ('joeyeo@yahoo.com' ,18,620 ),
 ('jonathanlim@gmail.com' ,18,630 ),
@@ -161,7 +143,7 @@ values
 ('gracelim@yahoo.com' ,19,710 ),
 ('deandramuliawan@gmail.com' ,19,720 ),
 ('Geoffery@gmail.com',20,640 ),
-('suzan@gmail.com',20,650 ),
+('suzan@gmail.com',20,650 ), 
 ('nathanial@yahoo.com' ,20,660 ),
 ('joeyeo@yahoo.com' ,20,670 ),
 ('jonathanlim@gmail.com' ,20,680 ),
@@ -172,4 +154,4 @@ values
 ('xuekai@gmail.com' ,21,680 ),
 ('abhiparikh@gmail.com' ,21,690 ),
 ('gracelim@yahoo.com' ,21,700 ),
-('deandramuliawan@gmail.com' ,21,720 );
+('deandramuliawan@gmail.com' ,21,720 ); 
