@@ -6,9 +6,11 @@
         <h2 class=post-title>
             <a href="{{ url_for('post_detail', id = post.id) }}">{{ post.title }}</a>
         </h2>
-        <div class=post-price>${{ post.price }}</div>
-        <div class=post-desc>{{ post.desc|safe }}</div>
-        <div class=post-user>Posted by: {{ post.name }}</div>
+        <span class=post-price>${{ post.price }}</span>
+        <div class=post-user>{{ post.name }}</div>
+        <div class=post-desc>
+            {{ post.description|safe }}
+        </div>
         {% if post.no_bids > 1 %}
         <div class=no-bids>{{ post.no_bids }} bids</div>
         {% elif post.no_bids == 1 %}

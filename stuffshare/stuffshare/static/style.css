@@ -1,7 +1,8 @@
 :root {
   --themeColor: #34a4ff;
-  --themeColorOp: #94cfff;
+  --themeColorOp: #c8e6ff;
   --themeBg: #f1f8ff;
+  --themeGrey: #708eb3;
 }
 
 body {
@@ -14,9 +15,10 @@ h1, h2 {
 
 h2 {
   padding-left: 15px;
+  color: var(--themeGrey);
 }
 
-h1 a, h3 a{
+h3 a {
   text-decoration: none;
   font-size: 1.3em;
   color: var(--themeColor);
@@ -29,10 +31,21 @@ h3 .delete_post:hover {
   opacity: 1;
 }
 
-h1 {
-  font-size: 3em;
+.pagetitle, .pagetitle a {
+  font-size: 2em;
+  text-align: center;
+  color: var(--themeColor);
+  text-decoration: none;
 }
 
+.subtitle {
+  text-align: center;
+  color: var(--themeColor);
+  font-style: italic;
+  font-weight: bold;
+  padding-right: 10px;
+  margin: 0em 0em 1em 0em;
+}
 .menubar {
   position: sticky;
   top: 0px;
@@ -79,9 +92,10 @@ h1 {
 }
 .notif {
   background: #cef5e0;
-  padding: 0.5em;
+  padding: 0.4em 1em 0.4em 1em;
   border: 1px solid #b3d3c2;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
+  border-radius: 10px;
 }
 .dismiss {
   float: right;
@@ -98,21 +112,27 @@ h1 {
 
 .post-title, .post-title a {
   color: var(--themeColor);
-  font-size: 1.2em;
+  font-size: 1.4em;
   text-decoration: None;
   padding-left: 10px;
+  display: inline;
 }
 
 .post-price {
-  float: right;
+  font-size: 1.2em;
   color: var(--themeColor);
 }
 
-
 .post-desc {
   display: block;
+  color: var(--themeGrey);
+  font-style: italic;
 }
 
+.post-user {
+  font-weight: bold;
+  color: var(--themeGrey);
+}
 .no-bids {
   --no-bid-color: rgb(88, 206, 77);
   display: inline-block;
@@ -128,6 +148,11 @@ h1 {
 }
 
 .menubutton {
-  margin-left: 10px;
+  margin-left: 3px;
   text-decoration: None;
+}
+
+.accepted-tag {
+  color: var(--themeGrey);
+  font-weight: bold;
 }

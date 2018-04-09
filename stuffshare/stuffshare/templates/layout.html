@@ -4,18 +4,27 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class=page>
   <div class=menubar>
-    <h1>
+    <h1 class=pagetitle>
       <a href="{{ url_for('show_posts') }}">stuffshare</a>
     </h1>
+    <p class=subtitle>
+      share your stuff!
+    </p>
     <div class=metanav>
       {% if not session.logged_in %}
       <a href="{{ url_for('login') }}">log in</a>
       <a href="{{ url_for('signup') }}">sign up</a>
       {% else %}
       <span class=logged-in-user>Logged in as: {{ session.name }}</span>
-      <a class=menubutton href="{{ url_for('show_user_posts', user_email = session.user_email) }}">My posts</a>
-      <a class=menubutton href="{{ url_for('editprofile') }}">Edit Profile</a>
-      <a class=menubutton href="{{ url_for('logout') }}">Logout</a>
+      <a class=menubutton href="{{ url_for('show_user_posts', user_email = session.user_email) }}">
+        <button>My posts</button>
+      </a>
+      <a class=menubutton href="{{ url_for('editprofile') }}">
+        <button>Edit Profile</button>
+      </a>
+      <a class=menubutton href="{{ url_for('logout') }}">
+        <button>Logout</button>
+      </a>
       {% endif %} </div> {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
     {% endfor %} {% if notifications and session.logged_in %} {% for notification in notifications %}

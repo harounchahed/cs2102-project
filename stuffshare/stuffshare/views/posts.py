@@ -16,7 +16,7 @@ def show_posts():
                               user_email=post["user_email"],
                               title=post["title"],
                               price=post["price"],
-                              desc=post["description"],
+                              description=post["description"],
                               no_bids=len(bids)))
         else:
             posts.append(dict(id=post["id"],
@@ -24,7 +24,7 @@ def show_posts():
                               user_email=post["user_email"],
                               title=post["title"],
                               price=post["price"],
-                              desc=post["description"],
+                              description=post["description"],
                               no_bids=0))
     return render_template('show_posts.html', posts=posts)
 
@@ -57,11 +57,15 @@ def post_detail(id):
         'select *, (select name from users where email = user_email) name from posts where id = ?', [id])
     bids = db_execute(
         'select *, (select name from users where email = user_email) name from bids where post_id = ?', [id])
+    accepted_bidder = db_execute(
+        'select * from accepted_bids where post_id = ?', [id])
+    if accepted_bidder is not None and len(accepted_bidder) == 1:
+        accepted_bidder = accepted_bidder[0]['user_email']
     if not post:
         flash("Sorry, that item does not exist")
         return redirect(url_for('show_posts'))
         # Note we access the first item in the list since we only expect one item
-    return render_template('post_detail.html', post=post[0], bids=bids)
+    return render_template('post_detail.html', post=post[0], bids=bids, accepted_bidder=accepted_bidder)
 
 
 @app.route('/<string:user_email>/posts', methods=['GET', 'POST'])
