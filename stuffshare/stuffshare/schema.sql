@@ -15,7 +15,7 @@ create table users (
 create table posts (
     id integer primary key, -- default autoincrements, so do not supply a value. See https://sqlite.org/autoinc.html.
     title char(100) not null,
-    'description' text,
+    'description' text not null,
     user_email char(100) not null,
     price numeric not null,
     foreign key (user_email) references users (email)
@@ -35,7 +35,6 @@ create table bids (
     user_email char(100),
     post_id integer,
     offer numeric not null,
-    --accepted integer default 0, -- sqlite does NOT have a boolean type. See http://www.sqlite.org/datatype3.html.
     primary key (user_email, post_id),
     foreign key (user_email) references users (email)
     ON DELETE CASCADE,
