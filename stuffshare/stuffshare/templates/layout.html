@@ -12,8 +12,12 @@
     </p>
     <div class=metanav>
       {% if not session.logged_in %}
-      <a href="{{ url_for('login') }}">log in</a>
-      <a href="{{ url_for('signup') }}">sign up</a>
+      <a class=menubutton href="{{ url_for('login') }}">
+        <button>Log In</button>
+      </a>
+      <a class=menubutton href="{{ url_for('signup') }}">
+        <button>Sign Up</button>
+      </a>
       {% else %}
       <span class=logged-in-user>Logged in as: {{ session.name }}</span>
       <a class=menubutton href="{{ url_for('show_user_posts', user_email = session.user_email) }}">

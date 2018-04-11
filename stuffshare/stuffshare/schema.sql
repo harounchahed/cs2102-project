@@ -1,17 +1,10 @@
--- flask tutorial schema
-drop table if exists entries;
-create table entries (
-  id integer primary key autoincrement,
-  title text not null,
-  'text' text not null
-);
-
 -- sqlite3 only allows one drop at a time
 drop table if exists posts;
 drop table if exists users;
 drop table if exists bids;
 drop table if exists accepted_bids;
 drop table if exists notifications;
+drop view if exists user_activity;
 
 create table users (
     email char(100) primary key,
@@ -75,26 +68,18 @@ create trigger created_bid_notif after insert on bids
     insert into notifications values ((select name from users where email = new.user_email), new.post_id);
   end;
 
--- create trigger updated_bid_notif after update on bids
---   begin
---     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
---   end;
-
--- create trigger accepted_bid_notif after insert on accepted_bids
---   begin
---     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
---   end;
-
--- create trigger deleted_bid_notif after delete on bids
---   begin
---     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
---   end;
-
--- create trigger deleted_post_notif after delete on posts
---   begin
---     -- insert into notifications values ((select name from users where new.user_email = email), new.post_id);
---   end;
-
+create view user_activity as 
+with num_posts as (select count(*) post_count, user_email as poster
+                   from posts group by user_email),
+user_accepted_bids as (select post_id,
+                      (select user_email from posts where post_id = id) as poster
+                      from accepted_bids),
+num_accepted_bids as (select count(*) ab_count, poster 
+                      from user_accepted_bids group by poster)
+select poster, post_count, 
+case when ab_count is Null then 0 else ab_count end ab_count
+from num_posts left natural outer join num_accepted_bids
+order by (post_count + ab_count) desc;
 
 insert into notifications
 (bidder, post_id)
@@ -201,3 +186,27 @@ values
 ('abhiparikh@gmail.com' ,21,690 ),
 ('gracelim@yahoo.com' ,21,700 ),
 ('deandramuliawan@gmail.com' ,21,720 );
+
+insert into accepted_bids
+(user_email, post_id) -- accepted is 0 by default
+values
+('Jeremy@gmail.com', 1),
+('Haroun@gmail.com', 2),
+('Haroun@gmail.com', 3),
+('Ewelina@gmail.com', 4),
+('nathanial@yahoo.com', 5),
+('joeyeo@yahoo.com', 6),
+('russelcrow@gmail.com', 7),
+('isabelletan@yahoo.com', 8),
+('abhiparikh@gmail.com', 9),
+('Jeremy@gmail.com', 10),
+('Haroun@gmail.com', 11),
+('Haroun@gmail.com', 12),
+('Barack@gmail.com', 13),
+('Haroun@gmail.com',14),
+('Jeremy@gmail.com', 15),
+('Ewelina@gmail.com', 16),
+('Geoffery@gmail.com', 17),
+('isabelletan@yahoo.com', 18);
+
+

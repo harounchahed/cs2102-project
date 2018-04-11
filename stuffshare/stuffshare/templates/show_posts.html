@@ -1,5 +1,28 @@
-{% extends "layout.html" %} {% block body %}
-<h2>All posts</h2>
+{% extends "layout.html" %} {% block body %} {% if activity %}
+<h2 class=subheader>Top 5 most active users</h2>
+<table>
+    <thead>
+        <th>User</th>
+        <th>Number of posts made</th>
+        <th>Number of bids accepted</th>
+    </thead>
+    <tbody>
+        {% for row in activity %}
+        <tr>
+            <td>{{ row.poster }}</td>
+            <td>{{ row.post_count }}</td>
+            <td>{{ row.ab_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<span>Filter by :</span>
+<a class=menubutton href="{{ url_for('show_posts', filter = 'most_active') }}">
+    <button>Most active</button>
+</a>
+{% endif %}
+<h2 class=subheader>{{ header }}</h2>
 <ul class=entries>
     {% for post in posts %}
     <li>

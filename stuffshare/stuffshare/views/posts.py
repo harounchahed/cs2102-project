@@ -2,31 +2,45 @@ from stuffshare import *
 from login import logged_in
 
 
+def order_by(values):
+    def order(e):
+        return values.index(e[0])
+    return order
+
+
 @app.route('/')
-def show_posts():
-    posts_rows = db_execute(
-        'select *, (select name from users where email = user_email) name from posts order by id desc')
+@app.route('/<string:filter>')
+def show_posts(filter=None):
+    if filter is None:
+        header = "Recent posts"
+        activity = None
+        posts_rows = db_execute(
+            'select *, (select name from users where email = user_email) name from posts order by id desc')
+    elif filter == "most_active":
+        header = "Posts ranked by most active users"
+        activity_rows = db_execute(
+            'select (select name from users where email = poster) poster, post_count, ab_count from user_activity')
+        activity = activity_rows[:5]
+        activity_names = [row[0] for row in activity_rows]
+        posts_rows = db_execute(
+            'select (select name from users where email = user_email) name, * from posts')
+        posts_rows = sorted(posts_rows, key=order_by(activity_names))
     posts = []
     for post in posts_rows:
         bids = db_execute(
             'select * from bids where post_id = ?', [post["id"]])
         if bids is not None:
-            posts.append(dict(id=post["id"],
-                              name=post['name'],
-                              user_email=post["user_email"],
-                              title=post["title"],
-                              price=post["price"],
-                              description=post["description"],
-                              no_bids=len(bids)))
+            no_bids = len(bids)
         else:
-            posts.append(dict(id=post["id"],
-                              name=post['name'],
-                              user_email=post["user_email"],
-                              title=post["title"],
-                              price=post["price"],
-                              description=post["description"],
-                              no_bids=0))
-    return render_template('show_posts.html', posts=posts)
+            no_bids = 0
+        posts.append(dict(id=post["id"],
+                          name=post['name'],
+                          user_email=post["user_email"],
+                          title=post["title"],
+                          price=post["price"],
+                          description=post["description"],
+                          no_bids=no_bids))
+    return render_template('show_posts.html', activity=activity, header=header, posts=posts)
 
 
 @app.route('/delete_post/<string:user_email>/<int:post_id>', methods=['GET'])
