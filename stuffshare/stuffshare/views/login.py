@@ -24,7 +24,7 @@ def login():
         login_password = request.form['password']
         user_emails = db_execute(
             'select * from users where email = ?', [login_user_email])
-        if user_emails is None and login_user_email != app.config['USERNAME']:
+        if user_emails == [] and login_user_email != app.config['USERNAME']:
             flash('Sorry, the account "{}" does not exist.'.format(login_user_email))
         elif login_password != "password":
             error = "Invalid password"

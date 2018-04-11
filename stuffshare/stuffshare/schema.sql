@@ -13,22 +13,23 @@ create table users (
 );
 
 create table posts (
-    id integer primary key, -- default autoincrements, so do not supply a value. See https://sqlite.org/autoinc.html.
+    id integer primary key, -- default autoincrements, so no need to supply a value. See https://sqlite.org/autoinc.html. 
     title char(100) not null,
     'description' text not null,
     user_email char(100) not null,
     price numeric not null,
     foreign key (user_email) references users (email)
-    ON DELETE CASCADE
+    on delete cascade
+    on update cascade
 );
 
--- we have accepted bids rather than accepted boolean as it is a (0, 1) relationship which is represented naturally by a referencing relation and unique constraint.  
 create table accepted_bids (
     user_email char(100),
-    post_id integer unique, -- this constraint ensures we only have one accepted bid per post.  
+    post_id integer unique, 
     primary key (user_email, post_id),
     foreign key (user_email, post_id) references bids (user_email, post_id)
-    ON DELETE CASCADE
+    on delete cascade
+    on update cascade
 );
 
 create table bids (
@@ -37,9 +38,11 @@ create table bids (
     offer numeric not null,
     primary key (user_email, post_id),
     foreign key (user_email) references users (email)
-    ON DELETE CASCADE,
+    on delete cascade
+    on update cascade,
     foreign key (post_id) references posts (id)
-    ON DELETE CASCADE
+    on delete cascade
+    on update cascade
 );
 
 create table notifications (
@@ -47,7 +50,8 @@ create table notifications (
     post_id integer,
     primary key (bidder, post_id),
     foreign key (bidder, post_id) references bids (user_email, post_id)
-    ON DELETE CASCADE
+    on delete cascade
+    on update cascade
 );
 
 create trigger check_if_already_accepted before insert on bids
